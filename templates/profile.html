@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-3xl w-full">
+        <h1 class="text-3xl font-bold text-pink-600 mb-6">{{ match.Name }}'s Profile</h1>
+        <div class="space-y-2">
+            <p><strong>Age:</strong> {{ match.age }}</p>
+            <p><strong>Status:</strong> {{ match.status }}</p>
+            <p><strong>Sex:</strong> {{ match.sex }}</p>
+            <p><strong>Orientation:</strong> {{ match.orientation }}</p>
+            <p><strong>Body Type:</strong> {{ match.body_type }}</p>
+            <p><strong>Diet:</strong> {{ match.diet }}</p>
+            <p><strong>Drinks:</strong> {{ match.drinks }}</p>
+            <p><strong>Drugs:</strong> {{ match.drugs }}</p>
+            <p><strong>Education:</strong> {{ match.education }}</p>
+            <p><strong>Ethnicity:</strong> {{ match.ethnicity }}</p>
+            <p><strong>Height:</strong> {{ match.height }} inches</p>
+            <p><strong>Income:</strong> {{ match.income }}</p>
+            <p><strong>Job:</strong> {{ match.job }}</p>
+            <p><strong>Last Online:</strong> {{ match.last_online }}</p>
+            <p><strong>Location:</strong> {{ match.location }}</p>
+            <p><strong>Offspring:</strong> {{ match.offspring }}</p>
+            <p><strong>Pets:</strong> {{ match.pets }}</p>
+            <p><strong>Religion:</strong> {{ match.religion }}</p>
+            <p><strong>Sign:</strong> {{ match.sign }}</p>
+            <p><strong>Smokes:</strong> {{ match.smokes }}</p>
+            <p><strong>Speaks:</strong> {{ match.speaks }}</p>
+            <p><strong>Bio:</strong> {{ match.essay0 }}</p>
+        </div>
+        <a href="{{ url_for('show_matches') }}" class="text-blue-500 hover:underline mt-4 block">Back to Matches</a>
+    </div>
+</body>
+</html>
