@@ -12,7 +12,7 @@ app.secret_key = "supersecretkey"
 #db = client["matchmaking_db"]
 #users_collection = db["users"]
 
-# Load model
+# Loading the saved model from pickle file
 with open("kmeans_matchmaking_model.pkl", "rb") as file:
     kmeans_model, scaler, df = pickle.load(file)
 
@@ -26,7 +26,7 @@ encoding_maps = {
 }
 
 def decode_match(match):
-    """Decodes numerical values in match dictionary using encoding_maps."""
+    # convert the numerical values back to categorical values(human readable form)
     for key, mapping in encoding_maps.items():
         if key in match:
             match[key] = mapping.get(match[key], "unknown")
@@ -48,30 +48,31 @@ def find_matches(test_user):
             return user_sex == candidate_sex and candidate_orientation == 2
         return False
 
-    # Convert input features to array and scale
+    # Converting input features to array and scale
     test_features = np.array([[test_user.get(key, 0) for key in ["age", "status", "orientation", "drinks", "drugs", "height", "smokes"]]])
     test_features_scaled = scaler.transform(test_features)
 
-    # Predict cluster
+    # Predicting which cluster the input data belongs to
     cluster = kmeans_model.predict(test_features_scaled)[0]
 
-    # Filter candidates within the cluster
+    # Filtering potential matches based on orientation 
     cluster_candidates = df[df["Cluster"] == cluster].copy()
     candidates = cluster_candidates[cluster_candidates.apply(is_match, axis=1)].copy()
 
     if candidates.empty:
         return []  # Return an empty list if no candidates found
 
-    # Scale candidate features
+    # Scaling candidate features
     candidate_features = scaler.transform(candidates[["age", "status", "orientation", "drinks", "drugs", "height", "smokes"]])
+    # Finding the candidates that lie the nearest with the input!
     match_distances = euclidean_distances(candidate_features, test_features_scaled).flatten()
 
-    # Add distance score and sort matches
+    # Adding distance score and sort matches
     candidates.loc[:, "distance_score"] = match_distances
     candidates = candidates.sort_values(by=["distance_score"], ascending=True)
 
     top_matches = candidates.head(10).copy()
-    top_matches["id"] = top_matches.index  # Assign an ID for linking
+    top_matches["id"] = top_matches.index
 
     return [decode_match(match) for match in top_matches.to_dict(orient="records")]
 
